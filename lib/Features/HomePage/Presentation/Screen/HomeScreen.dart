@@ -37,7 +37,7 @@ class _homeScreenState extends State<homeScreen> {
               CircularProgressIndicator() // Show loading indicator
             else
               CustomButton(
-                backgroundColor: loginButton,
+                backgroundColor: signOutButton,
                 text: "SignOut",
                 onPressed: () async {
                   await _signOut(context); // Trigger sign-out
