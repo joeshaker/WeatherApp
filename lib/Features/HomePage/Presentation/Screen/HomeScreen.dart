@@ -41,6 +41,7 @@ class _homeScreenState extends State<homeScreen> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HomePage
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -80,6 +81,23 @@ class _homeScreenState extends State<homeScreen> {
                 backgroundColor: background,
                 title: Center(child: defaultText(text: "Weather App", color: Colors.white)),
                 automaticallyImplyLeading: false,
+=======
+    return Scaffold(
+      body: Center(
+        child: Column(
+          // crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (_isLoading)
+              CircularProgressIndicator() // Show loading indicator
+            else
+              CustomButton(
+                backgroundColor: signOutButton,
+                text: "SignOut",
+                onPressed: () async {
+                  await _signOut(context); // Trigger sign-out
+                },
+>>>>>>> master
               ),
               backgroundColor: background,
               body: Column(
