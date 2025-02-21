@@ -8,7 +8,7 @@ import 'package:weatherapp/Features/Auth/Presentation/Controller/SignupCubit/sig
 import 'package:weatherapp/Features/Auth/Presentation/Screen/LoginScreen.dart';
 import 'package:weatherapp/Features/Auth/Presentation/Widget/TextFormFeild.dart';
 import '../../../../Core/Component/Button.dart';
-import '../../../../Core/Component/Text.dart';
+import '../../../../Core/Component/LoginText.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

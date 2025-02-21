@@ -9,7 +9,7 @@ import 'package:weatherapp/Features/Auth/Presentation/Controller/LoginCubit/logi
 import 'package:weatherapp/Features/Auth/Presentation/Screen/SignUpScreen.dart';
 import 'package:weatherapp/Features/Auth/Presentation/Widget/TextFormFeild.dart';
 import 'package:weatherapp/Features/HomePage/Presentation/Screen/HomeScreen.dart';
-import '../../../../Core/Component/Text.dart';
+import '../../../../Core/Component/LoginText.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

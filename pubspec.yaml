@@ -40,6 +40,10 @@ dependencies:
   fluttertoast: ^8.2.8
   conditional_builder_rec: ^1.0.0
   flutter_bloc: ^8.1.6
+  table_calendar: ^3.0.8 # For calendar view
+  percent_indicator: ^4.2.2
+  intl: ^0.18.1
+  dio:
 
 dev_dependencies:
   flutter_test:
