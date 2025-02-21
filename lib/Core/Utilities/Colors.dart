@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-
+// Adding new colors to the app
 Color background=Color(0xFF161667);
 Color backgroundTextForm=Color(0xFF25254A);
 Color backgroundCard=Color(0xFF38387E);

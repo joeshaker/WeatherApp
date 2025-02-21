@@ -13,6 +13,7 @@ import 'package:weatherapp/Core/Component/defaultText.dart';
 import 'package:weatherapp/Core/Component/getDate.dart';
 import 'package:weatherapp/Core/Utilities/Colors.dart';
 import 'package:weatherapp/Features/Auth/Presentation/Controller/auth.dart';
+// update the homeScreen class to include the following:
 
 class homeScreen extends StatefulWidget {
   const homeScreen({super.key});
