@@ -80,7 +80,6 @@ class _homeScreenState extends State<homeScreen> {
                 backgroundColor: background,
                 title: Center(child: defaultText(text: "Weather App", color: Colors.white)),
                 automaticallyImplyLeading: false,
-
               ),
               backgroundColor: background,
               body: Column(
