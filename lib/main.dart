@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weatherapp/Core/Network/dio_Helper.dart';
 import 'package:weatherapp/Features/Auth/Data/Repository/repository.dart';
 import 'package:weatherapp/Features/Auth/Presentation/Controller/LoginCubit/login_cubit.dart';
 import 'package:weatherapp/Features/Auth/Presentation/Screen/LoginScreen.dart';
@@ -8,6 +9,7 @@ import 'package:weatherapp/Features/Auth/Presentation/Screen/SignUpScreen.dart';
 import 'package:weatherapp/Features/HomePage/Presentation/Screen/HomeScreen.dart';
 
 Future<void> main() async {
+  DioHelper.init();
   WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter binding is initialized
   await Firebase.initializeApp();
   runApp(const MyApp());
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context)=>LoginCubit(AuthRepository()),
-          child: const SignUpScreen()) ,
+          child:  const  SignUpScreen()) ,
     );
   }
 }
