@@ -16,7 +16,13 @@ import 'package:weatherapp/Features/Auth/Presentation/Controller/auth.dart';
 // update the homeScreen class to include the following:
 
 class homeScreen extends StatefulWidget {
-  const homeScreen({super.key});
+  final double latitude;
+  final double longitude;
+  const homeScreen({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+  });
 
   @override
   State<homeScreen> createState() => _homeScreenState();
@@ -56,7 +62,7 @@ class _homeScreenState extends State<homeScreen> {
     final getWeather = GetWeather(weatherRepository);
 
     return BlocProvider(
-      create: (context) => HomeCubit(getWeather: getWeather)..getWeatherData("Tanta", 3, 24, api_key),
+      create: (context) => HomeCubit(getWeather: getWeather)..getWeatherData("${widget.latitude},${widget.longitude}", 3, 24, api_key),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           // TODO: implement listener

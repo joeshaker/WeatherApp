@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart'; // Add geolocator package
 import 'package:weatherapp/Core/Component/Button.dart';
 import 'package:weatherapp/Core/Utilities/Colors.dart';
 import 'package:weatherapp/Core/Utilities/Strings.dart';
@@ -23,6 +24,35 @@ class _LoginScreenState extends State<LoginScreen> {
   final passController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
+  // Function to get the user's current location
+  Future<Position?> _getUserLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled
+      Fluttertoast.showToast(msg: "Please enable location services");
+      return null;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied
+        Fluttertoast.showToast(msg: "Location permissions are denied");
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are permanently denied
+      Fluttertoast.showToast(msg: "Location permissions are permanently denied");
+      return null;
+    }
+
+    // Get the current location
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -33,24 +63,35 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocProvider(
         create: (context) => LoginCubit(AuthRepository()),
         child: BlocConsumer<LoginCubit, LoginState>(
-          listener: (context, state) {
+          listener: (context, state) async {
             if (state is LoginSuccess) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => homeScreen()),
-              );
+              // Get the user's location after successful login
+              Position? position = await _getUserLocation();
+              if (position != null) {
+                // Navigate to HomeScreen with location data
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => homeScreen(
+                      latitude: position.latitude,
+                      longitude: position.longitude,
+                    ),
+                  ),
+                );
+              } else {
+                // Handle case where location is not available
+                Fluttertoast.showToast(msg: "Unable to fetch location");
+              }
             } else if (state is LoginFailure) {
               // Show error message on login failure
-              // ScaffoldMessenger.of(context).showSnackBar(
-              //   SnackBar(content: Text(state.message)),
-              // );
               Fluttertoast.showToast(
-                  msg: state.message,
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.SNACKBAR,
-                  backgroundColor: Colors.black,
-                  textColor: Colors.white,
-                  fontSize: 16.0);
+                msg: state.message,
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.SNACKBAR,
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+                fontSize: 16.0,
+              );
             }
           },
           builder: (context, state) {
@@ -123,9 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (formKey.currentState != null &&
                             formKey.currentState!.validate()) {
                           context.read<LoginCubit>().signInWithEmailAndPassword(
-                                emailController.text,
-                                passController.text,
-                              );
+                            emailController.text,
+                            passController.text,
+                          );
                         }
                       },
                       width: 250,
