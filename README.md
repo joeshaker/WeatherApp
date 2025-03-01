@@ -1,6 +1,34 @@
 # weatherapp
 
 A new Flutter project.
+Local host the Ai Model by following these Instrcutions:
+
+1-Run these commands in the terminal
+
+python -m venv venv
+
+//For Windows
+venv\Scripts\activate.bat
+
+Set-ExecutionPolicy Unrestricted -Scope Process
+
+venv\Scripts\Activate.ps1
+
+pip install Flask
+
+pip show Flask
+
+pip install numpy
+
+pip install scikit-learn==1.3.2
+
+python app.py
+
+python app.py // to host the AI model and access it through your local host on port 5001.
+
+https://github.com/user-attachments/assets/664beac2-e3f9-4a8b-8c92-e3d1296ba363
+
+
 
 ## Getting Started
 
