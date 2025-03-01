@@ -10,4 +10,7 @@ class GetWeather {
   Future<WeatherEntity> execute(String location) async {
     return await repository.getWeather(location);
   }
+  Future<List<int>> getWeatherConditions(WeatherEntity weather) async {
+    return await repository.getWeatherConditions(weather);
+  }
 }
