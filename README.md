@@ -1,6 +1,7 @@
 # weatherapp
 
 A new Flutter project.
+
 Local host the Ai Model by following these Instrcutions:
 
 1-Run these commands in the terminal
@@ -8,6 +9,7 @@ Local host the Ai Model by following these Instrcutions:
 python -m venv venv
 
 //For Windows
+
 venv\Scripts\activate.bat
 
 Set-ExecutionPolicy Unrestricted -Scope Process
