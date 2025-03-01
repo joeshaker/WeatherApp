@@ -27,13 +27,41 @@ class WeatherRepositoryImpl implements WeatherRepository {
       humidity: response.current.humidity.toDouble(),
       uvIndex: response.current.uv,
       pressureMb: response.current.pressureMb,
-      forecastDays: response.forecast.forecastday.map((forecastDay) => ForecastDayEntity(
-        date: forecastDay.date,
-        maxTempC: forecastDay.day.maxtempC,
-        minTempC: forecastDay.day.mintempC,
-        avgHumidity: forecastDay.day.avghumidity.toDouble(),
-        chanceOfRain: forecastDay.day.dailyChanceOfRain.toDouble(),
-      )).toList(),
+      cloud: response.current.cloud.toDouble(),
+      forecastDays: response.forecast.forecastday.map((forecastDay) =>
+          ForecastDayEntity(
+            date: forecastDay.date,
+            maxTempC: forecastDay.day.maxtempC,
+            minTempC: forecastDay.day.mintempC,
+            avgHumidity: forecastDay.day.avghumidity.toDouble(),
+            chanceOfRain: forecastDay.day.dailyChanceOfRain.toDouble(),
+          )).toList(),
     );
+  }
+
+  @override
+  Future<List<int>> getWeatherConditions(WeatherEntity weather) {
+    List<int> conditions = [0, 0, 0, 0, 0];
+
+    if (weather.conditionText.toLowerCase().contains("rain")) {
+      conditions[0] = 1;
+    }
+
+    if (weather.conditionText.toLowerCase().contains("sun")) {
+      conditions[1] = 1;
+    }
+
+    if (weather.temperatureC > 30) {
+      conditions[2] = 1;
+    }
+
+    if (weather.temperatureC >= 15 && weather.temperatureC <= 30) {
+      conditions[3] = 1;
+    }
+
+    if (weather.humidity >= 30 && weather.humidity <= 60) {
+      conditions[4] = 1;
+    }
+    return Future.value(conditions);
   }
 }

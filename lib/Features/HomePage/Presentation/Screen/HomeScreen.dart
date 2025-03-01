@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weatherapp/Core/Component/Button.dart';
 import 'package:weatherapp/Core/Network/dio_helper.dart';
 import 'package:weatherapp/Core/Utilities/Strings.dart';
 import 'package:weatherapp/Features/HomePage/Data/data_source/data_source.dart';
 import 'package:weatherapp/Features/HomePage/Data/repository/weather_rep_imp.dart';
+import 'package:weatherapp/Features/HomePage/Domain/entity/weather_entity.dart';
 import 'package:weatherapp/Features/HomePage/Domain/use_case/get_weather.dart';
 import 'package:weatherapp/Features/HomePage/Presentation/Controller/Cubit/home_cubit.dart';
 import 'package:weatherapp/Features/HomePage/Presentation/Widget/Container.dart';
@@ -96,7 +101,6 @@ class _homeScreenState extends State<homeScreen> {
                         children: [
                           Padding(
                             padding: EdgeInsets.only(
-                                // top: height * .08,
                                 right: width * .05,
                                 left: width * .05),
                             child: Row(
@@ -154,17 +158,11 @@ class _homeScreenState extends State<homeScreen> {
                               ],
                             ),
                           ),
-                          // SizedBox(
-                          //   height: height * 0.01,
-                          // ),
                           Image.network(
                             "https:${response.response?.conditionIcon}",
                             fit: BoxFit.fill,
                             width: width * 0.5,
                           ),
-                          // SizedBox(
-                          //   height: height * 0.01,
-                          // ),
                           defaultText(
                             text: "${response.response?.temperatureC}°C",
                             fontSize: width * 0.08,
@@ -238,6 +236,33 @@ class _homeScreenState extends State<homeScreen> {
                           SizedBox(
                             height: height * 0.02,
                           ),
+                          CustomButton(
+                            onPressed: () async {
+                              // Get the weather conditions
+                              final weather = response.response;
+                              if (weather != null) {
+                                List<int> conditions = await getWeather.getWeatherConditions(weather);
+                                print(conditions);
+                                // List<int> features_1 = [0,1,0,1,1];
+                                // Get the prediction
+                                final prediction = await getPrediction(conditions);
+
+                                print("Prediction: $prediction");
+                                // Show the alert dialog with the prediction result
+                                _showAlertDialog(context, prediction);
+                              } else {
+                                if (kDebugMode) {
+                                  print("Weather data is null");
+                                }
+                              }
+                            },
+                            width: 300,
+                            height: 50,
+                            text: "Get Prediction",
+                          ),
+                          SizedBox(
+                            height: height * 0.03,
+                          ),
                         ],
                       ),
                     ),
@@ -253,5 +278,61 @@ class _homeScreenState extends State<homeScreen> {
         },
       ),
     );
+  }
+}
+void _showAlertDialog(BuildContext context, dynamic prediction) {
+  String message;
+  if (prediction[0] == 0) {
+    message = "You should stay in your home because of the weather.";
+  } else {
+    message = "You can leave the house today";
+
+  }
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Prediction for the Weather"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
+}
+Future<dynamic> getPrediction(List<int> features) async {
+  final url = Uri.parse('http://192.168.1.30:5001/predict');
+
+  // Create the POST request body
+  Map<String, dynamic> body = {
+    'features': features
+  };
+
+  // Send the POST request
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: json.encode(body),
+  );
+
+  // Handle the response
+  if (response.statusCode == 200) {
+    final prediction = json.decode(response.body)['prediction'];
+    if (kDebugMode) {
+      print('Prediction: $prediction');
+    }
+    return prediction; // Return the prediction value (0 or 1)
+  } else {
+    if (kDebugMode) {
+      print('Failed to get prediction');
+    }
+    throw Exception('Failed to get prediction'); // Throw an exception if the request fails
   }
 }

@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context)=>LoginCubit(AuthRepository()),
-          child:  const  SignUpScreen()) ,
+          child:  const  SignUpScreen() ),
     );
   }
 }
